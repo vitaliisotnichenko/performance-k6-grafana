@@ -1,4 +1,5 @@
 import http from "k6/http";
+import { check } from "k6";
 import { getAuthToken } from "../utils/auth.helper.ts";
 
 interface SetupData {
@@ -30,6 +31,8 @@ export default function ({ token }: SetupData) {
             }
         }
     );
-
-    console.log(res.json());
+    check(res, {
+      "Status-code": (res) => res.status === 200,
+      "Request duration": (res) => res.timings.duration< 300,
+    });
 }
