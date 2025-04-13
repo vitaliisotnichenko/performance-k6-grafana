@@ -1,6 +1,13 @@
 import http from "k6/http";
 import { check } from "k6";
 import { getAuthToken } from "../utils/auth.helper.ts";
+import { Options } from "k6/options";
+
+
+export const options: Options = {
+    vus: 3,
+    duration: "20s",
+}
 
 interface SetupData {
     token: string;
