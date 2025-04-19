@@ -2,19 +2,15 @@ import http from "k6/http";
 import {check, sleep} from "k6";
 import { getAuthToken } from "../utils/auth.helper.ts";
 import { Options } from "k6/options";
-import {scenario} from "k6/execution";
 
 
 export const options: Options = {
-    vus: 3,
-    duration: "20s",
-    cloud: {
-        projectID: "3755455",
-        name: "Pizza-Load-Test",
-        distribution: {
-          scenario: { loadZone: "amazon:se:stockholm", percent: 100 }
-        }
-    },
+    stages: [
+        { duration: "10s", target: 5 }, // Ramp up to 5 users over 10 seconds
+        { duration: "30s", target: 15 }, // Stay at 5 users for 30 seconds
+        { duration: "10s", target: 5 }, // Ramp down to 5 users over 10 seconds
+        { duration: "10s", target: 0 }, // Ramp down to 0 users over 10 seconds
+    ],
 }
 
 interface SetupData {
